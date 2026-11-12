@@ -1,0 +1,25 @@
+:root {
+  /* Creative Studio Editorial Palette */
+  --bg-canvas: #faf8f5;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f2eee8;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --border-subtle: #e4dfd7;
+
+  /* Expressive Accents */
+  --accent-primary: #e11d48;
+  --accent-secondary: #6366f1;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 8px 30px rgba(24, 24, 27, 0.06);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
