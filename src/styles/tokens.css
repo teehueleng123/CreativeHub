@@ -1,25 +1,49 @@
 :root {
-  /* Creative Studio Editorial Palette */
-  --bg-canvas: #faf8f5;
+  /* Editorial Studio Palette */
+  --bg-canvas: #faf7f2;
   --bg-surface: #ffffff;
-  --bg-subtle: #f2eee8;
+  --bg-subtle: #f3ede4;
+  --bg-sidebar: #16161a;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --bg-sidebar-active: rgba(255, 255, 255, 0.14);
+
   --text-primary: #18181b;
   --text-secondary: #52525b;
   --text-muted: #71717a;
-  --border-subtle: #e4dfd7;
+  --text-on-dark: #f4f4f5;
+  --text-on-dark-muted: #a1a1aa;
 
-  /* Expressive Accents */
+  --border-subtle: #e6dfd4;
+  --border-strong: #d4cab9;
+
+  /* Expressive Brand Accents */
   --accent-primary: #e11d48;
+  --accent-primary-hover: #be123c;
+  --accent-primary-soft: #ffe4e6;
   --accent-secondary: #6366f1;
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
 
-  /* Radii & Shadows */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --shadow-card: 0 8px 30px rgba(24, 24, 27, 0.06);
+  /* Status */
+  --status-success-bg: #d1fae5;
+  --status-success-text: #065f46;
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #92400e;
+  --status-error-bg: #fee2e2;
+  --status-error-text: #991b1b;
+
+  /* Radii & Elevation */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --shadow-card: 0 8px 28px rgba(24, 24, 27, 0.05);
+  --shadow-hover: 0 14px 34px rgba(24, 24, 27, 0.09);
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --transition-fast: 160ms ease;
 }
