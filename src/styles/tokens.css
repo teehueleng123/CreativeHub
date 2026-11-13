@@ -1,49 +1,335 @@
 :root {
-  /* Editorial Studio Palette */
-  --bg-canvas: #faf7f2;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f3ede4;
-  --bg-sidebar: #16161a;
-  --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
-  --bg-sidebar-active: rgba(255, 255, 255, 0.14);
-
-  --text-primary: #18181b;
-  --text-secondary: #52525b;
-  --text-muted: #71717a;
-  --text-on-dark: #f4f4f5;
-  --text-on-dark-muted: #a1a1aa;
-
-  --border-subtle: #e6dfd4;
-  --border-strong: #d4cab9;
-
-  /* Expressive Brand Accents */
-  --accent-primary: #e11d48;
-  --accent-primary-hover: #be123c;
-  --accent-primary-soft: #ffe4e6;
-  --accent-secondary: #6366f1;
-  --accent-amber: #f59e0b;
-  --accent-emerald: #10b981;
-
-  /* Status */
-  --status-success-bg: #d1fae5;
-  --status-success-text: #065f46;
-  --status-warning-bg: #fef3c7;
-  --status-warning-text: #92400e;
-  --status-error-bg: #fee2e2;
-  --status-error-text: #991b1b;
-
-  /* Radii & Elevation */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
-  --shadow-card: 0 8px 28px rgba(24, 24, 27, 0.05);
-  --shadow-hover: 0 14px 34px rgba(24, 24, 27, 0.09);
-
-  /* Typography */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
+  --transition-fast: 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  /* Layout */
-  --sidebar-width: 260px;
-  --transition-fast: 160ms ease;
+[data-style='atelier'] {
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 32px;
+}
+
+[data-style='cosmos'] {
+  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+}
+
+/* ========================================================
+   STYLE 1: SCENIC SANCTUARY ATMOSPHERES (PRESERVED)
+   ======================================================== */
+:root,
+[data-atmosphere='twilight'] {
+  --bg-surface-base: #09141b;
+  --bg-surface: rgba(18, 35, 42, 0.62);
+  --bg-surface-hover: rgba(24, 46, 55, 0.78);
+  --bg-subtle: rgba(255, 255, 255, 0.08);
+  --bg-dock: rgba(14, 28, 35, 0.74);
+
+  --text-primary: #f1f6f4;
+  --text-secondary: #c1d2ce;
+  --text-muted: #8fa8a3;
+
+  --border-subtle: rgba(255, 255, 255, 0.16);
+  --border-hairline: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.3);
+
+  --accent-primary: #6fd3bf;
+  --accent-primary-ink: #0f2421;
+  --accent-primary-soft: rgba(111, 211, 191, 0.18);
+  --accent-secondary: #8fb7e0;
+  --accent-emerald: #6fd3bf;
+  --accent-rose: #f08d9b;
+
+  --status-success-bg: rgba(47, 133, 107, 0.25);
+  --status-success-text: #a7f3d0;
+  --status-warning-bg: rgba(201, 142, 91, 0.24);
+  --status-warning-text: #fde68a;
+  --status-error-bg: rgba(199, 75, 91, 0.25);
+  --status-error-text: #fecaca;
+
+  --shadow-card: 0 18px 46px rgba(4, 12, 16, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --shadow-hover: 0 24px 56px rgba(4, 12, 16, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+[data-atmosphere='dawn'] {
+  --bg-surface-base: #edf3f0;
+  --bg-surface: rgba(255, 255, 255, 0.7);
+  --bg-surface-hover: rgba(255, 255, 255, 0.88);
+  --bg-subtle: rgba(47, 111, 104, 0.08);
+  --bg-dock: rgba(255, 255, 255, 0.78);
+
+  --text-primary: #182826;
+  --text-secondary: #465a57;
+  --text-muted: #6b7f7b;
+
+  --border-subtle: rgba(255, 255, 255, 0.85);
+  --border-hairline: rgba(30, 60, 56, 0.12);
+  --border-strong: rgba(30, 60, 56, 0.24);
+
+  --accent-primary: #2d6f67;
+  --accent-primary-ink: #ffffff;
+  --accent-primary-soft: rgba(45, 111, 103, 0.14);
+  --accent-secondary: #526f8c;
+  --accent-emerald: #2a7f64;
+  --accent-rose: #c75b6d;
+
+  --status-success-bg: rgba(209, 245, 229, 0.9);
+  --status-success-text: #0e4e31;
+  --status-warning-bg: rgba(254, 243, 199, 0.92);
+  --status-warning-text: #784704;
+  --status-error-bg: rgba(254, 226, 226, 0.92);
+  --status-error-text: #8c1d1d;
+
+  --shadow-card: 0 14px 36px rgba(34, 54, 51, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  --shadow-hover: 0 22px 48px rgba(34, 54, 51, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+[data-atmosphere='forest'] {
+  --bg-surface-base: #071510;
+  --bg-surface: rgba(12, 28, 22, 0.68);
+  --bg-surface-hover: rgba(18, 38, 30, 0.84);
+  --bg-subtle: rgba(255, 255, 255, 0.08);
+  --bg-dock: rgba(10, 24, 18, 0.8);
+
+  --text-primary: #eef7f2;
+  --text-secondary: #bed4c8;
+  --text-muted: #8ca89a;
+
+  --border-subtle: rgba(255, 255, 255, 0.15);
+  --border-hairline: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.3);
+
+  --accent-primary: #52c29d;
+  --accent-primary-ink: #071f16;
+  --accent-primary-soft: rgba(82, 194, 157, 0.18);
+  --accent-secondary: #8ab8cf;
+  --accent-emerald: #52c29d;
+  --accent-rose: #f08d9b;
+
+  --status-success-bg: rgba(47, 133, 107, 0.28);
+  --status-success-text: #a7f3d0;
+  --status-warning-bg: rgba(201, 142, 91, 0.26);
+  --status-warning-text: #fde68a;
+  --status-error-bg: rgba(199, 75, 91, 0.28);
+  --status-error-text: #fecaca;
+
+  --shadow-card: 0 18px 46px rgba(4, 16, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --shadow-hover: 0 26px 58px rgba(4, 16, 12, 0.54), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+/* ========================================================
+   STYLE 2: ASTONISHING SURREAL DREAMSCAPE ATMOSPHERES
+   ======================================================== */
+[data-atmosphere='mirror'],
+[data-atmosphere='atelier'] {
+  --bg-surface-base: #fbf6f5;
+  --bg-surface: rgba(255, 255, 255, 0.68);
+  --bg-surface-hover: rgba(255, 255, 255, 0.9);
+  --bg-subtle: rgba(210, 150, 140, 0.1);
+  --bg-dock: rgba(255, 255, 255, 0.74);
+
+  --text-primary: #261b18;
+  --text-secondary: #5e4742;
+  --text-muted: #8e736e;
+
+  --border-subtle: rgba(255, 255, 255, 0.95);
+  --border-hairline: rgba(210, 150, 140, 0.2);
+  --border-strong: rgba(210, 150, 140, 0.38);
+
+  --accent-primary: #c45b45;
+  --accent-primary-ink: #ffffff;
+  --accent-primary-soft: rgba(196, 91, 69, 0.16);
+  --accent-secondary: #748c82;
+  --accent-emerald: #3d7d70;
+  --accent-rose: #c75b6d;
+
+  --status-success-bg: rgba(220, 245, 232, 0.92);
+  --status-success-text: #1a4930;
+  --status-warning-bg: rgba(255, 242, 215, 0.94);
+  --status-warning-text: #744408;
+  --status-error-bg: rgba(254, 228, 228, 0.94);
+  --status-error-text: #882323;
+
+  --shadow-card: 0 20px 48px rgba(160, 110, 100, 0.1), inset 0 1px 2px rgba(255, 255, 255, 1);
+  --shadow-hover: 0 28px 64px rgba(160, 110, 100, 0.18), inset 0 1px 2px rgba(255, 255, 255, 1);
+}
+
+[data-atmosphere='dunes'],
+[data-atmosphere='zen'] {
+  --bg-surface-base: #f7f4fa;
+  --bg-surface: rgba(255, 255, 255, 0.7);
+  --bg-surface-hover: rgba(255, 255, 255, 0.92);
+  --bg-subtle: rgba(150, 120, 180, 0.1);
+  --bg-dock: rgba(255, 255, 255, 0.76);
+
+  --text-primary: #211926;
+  --text-secondary: #564660;
+  --text-muted: #847290;
+
+  --border-subtle: rgba(255, 255, 255, 0.95);
+  --border-hairline: rgba(160, 130, 190, 0.2);
+  --border-strong: rgba(160, 130, 190, 0.38);
+
+  --accent-primary: #7b589c;
+  --accent-primary-ink: #ffffff;
+  --accent-primary-soft: rgba(123, 88, 156, 0.16);
+  --accent-secondary: #58788e;
+  --accent-emerald: #39826a;
+  --accent-rose: #c75b6d;
+
+  --status-success-bg: rgba(220, 245, 232, 0.92);
+  --status-success-text: #0e4e31;
+  --status-warning-bg: rgba(254, 243, 202, 0.94);
+  --status-warning-text: #784704;
+  --status-error-bg: rgba(254, 226, 226, 0.94);
+  --status-error-text: #8c1d1d;
+
+  --shadow-card: 0 20px 48px rgba(120, 90, 150, 0.09), inset 0 1px 2px rgba(255, 255, 255, 1);
+  --shadow-hover: 0 28px 64px rgba(120, 90, 150, 0.17), inset 0 1px 2px rgba(255, 255, 255, 1);
+}
+
+[data-atmosphere='pavilion'],
+[data-atmosphere='solarium'] {
+  --bg-surface-base: #fdf8ee;
+  --bg-surface: rgba(255, 252, 245, 0.72);
+  --bg-surface-hover: rgba(255, 254, 250, 0.94);
+  --bg-subtle: rgba(200, 140, 60, 0.1);
+  --bg-dock: rgba(255, 252, 245, 0.78);
+
+  --text-primary: #281c12;
+  --text-secondary: #614a36;
+  --text-muted: #8f745e;
+
+  --border-subtle: rgba(255, 255, 255, 0.95);
+  --border-hairline: rgba(200, 140, 60, 0.2);
+  --border-strong: rgba(200, 140, 60, 0.38);
+
+  --accent-primary: #c96e2e;
+  --accent-primary-ink: #ffffff;
+  --accent-primary-soft: rgba(201, 110, 46, 0.16);
+  --accent-secondary: #68846c;
+  --accent-emerald: #39825b;
+  --accent-rose: #b8535c;
+
+  --status-success-bg: rgba(220, 245, 227, 0.92);
+  --status-success-text: #1a4930;
+  --status-warning-bg: rgba(255, 242, 212, 0.94);
+  --status-warning-text: #744408;
+  --status-error-bg: rgba(254, 226, 226, 0.94);
+  --status-error-text: #882323;
+
+  --shadow-card: 0 20px 48px rgba(170, 110, 40, 0.1), inset 0 1px 2px rgba(255, 255, 255, 1);
+  --shadow-hover: 0 28px 64px rgba(170, 110, 40, 0.18), inset 0 1px 2px rgba(255, 255, 255, 1);
+}
+
+/* ========================================================
+   STYLE 3: THE COSMIC OBSERVATORY / GALAXY ATMOSPHERES
+   ======================================================== */
+[data-atmosphere='nebula'],
+[data-atmosphere='cosmos'] {
+  --bg-surface-base: #060411;
+  --bg-surface: rgba(18, 12, 38, 0.74);
+  --bg-surface-hover: rgba(28, 18, 56, 0.88);
+  --bg-subtle: rgba(168, 85, 247, 0.14);
+  --bg-dock: rgba(12, 8, 28, 0.85);
+
+  --text-primary: #fdf4ff;
+  --text-secondary: #e9d5ff;
+  --text-muted: #c084fc;
+
+  --border-subtle: rgba(168, 85, 247, 0.3);
+  --border-hairline: rgba(168, 85, 247, 0.38);
+  --border-strong: rgba(192, 132, 252, 0.6);
+
+  --accent-primary: #c084fc;
+  --accent-primary-ink: #19052b;
+  --accent-primary-soft: rgba(192, 132, 252, 0.22);
+  --accent-secondary: #38bdf8;
+  --accent-emerald: #34d399;
+  --accent-rose: #f472b6;
+
+  --status-success-bg: rgba(52, 211, 153, 0.2);
+  --status-success-text: #6ee7b7;
+  --status-warning-bg: rgba(251, 191, 36, 0.2);
+  --status-warning-text: #fde68a;
+  --status-error-bg: rgba(248, 113, 113, 0.22);
+  --status-error-text: #fca5a5;
+
+  --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.65), 0 0 24px rgba(168, 85, 247, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 36px rgba(168, 85, 247, 0.36), inset 0 1px 1px rgba(255, 255, 255, 0.32);
+}
+
+[data-atmosphere='stargate'] {
+  --bg-surface-base: #030714;
+  --bg-surface: rgba(8, 16, 40, 0.74);
+  --bg-surface-hover: rgba(14, 26, 60, 0.88);
+  --bg-subtle: rgba(56, 189, 248, 0.14);
+  --bg-dock: rgba(6, 12, 30, 0.85);
+
+  --text-primary: #f0f9ff;
+  --text-secondary: #bae6fd;
+  --text-muted: #7dd3fc;
+
+  --border-subtle: rgba(56, 189, 248, 0.3);
+  --border-hairline: rgba(56, 189, 248, 0.38);
+  --border-strong: rgba(125, 211, 252, 0.6);
+
+  --accent-primary: #38bdf8;
+  --accent-primary-ink: #082f49;
+  --accent-primary-soft: rgba(56, 189, 248, 0.22);
+  --accent-secondary: #818cf8;
+  --accent-emerald: #2dd4bf;
+  --accent-rose: #f472b6;
+
+  --status-success-bg: rgba(45, 212, 191, 0.2);
+  --status-success-text: #5eead4;
+  --status-warning-bg: rgba(251, 191, 36, 0.2);
+  --status-warning-text: #fde68a;
+  --status-error-bg: rgba(248, 113, 113, 0.22);
+  --status-error-text: #fca5a5;
+
+  --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.65), 0 0 24px rgba(56, 189, 248, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 36px rgba(56, 189, 248, 0.36), inset 0 1px 1px rgba(255, 255, 255, 0.32);
+}
+
+[data-atmosphere='aurora'] {
+  --bg-surface-base: #080603;
+  --bg-surface: rgba(24, 18, 10, 0.74);
+  --bg-surface-hover: rgba(36, 26, 14, 0.88);
+  --bg-subtle: rgba(251, 191, 36, 0.12);
+  --bg-dock: rgba(16, 12, 6, 0.86);
+
+  --text-primary: #fffbeb;
+  --text-secondary: #fef3c7;
+  --text-muted: #fde68a;
+
+  --border-subtle: rgba(251, 191, 36, 0.3);
+  --border-hairline: rgba(251, 191, 36, 0.38);
+  --border-strong: rgba(251, 191, 36, 0.65);
+
+  --accent-primary: #fbbf24;
+  --accent-primary-ink: #2b1800;
+  --accent-primary-soft: rgba(251, 191, 36, 0.22);
+  --accent-secondary: #38bdf8;
+  --accent-emerald: #34d399;
+  --accent-rose: #f472b6;
+
+  --status-success-bg: rgba(52, 211, 153, 0.2);
+  --status-success-text: #6ee7b7;
+  --status-warning-bg: rgba(251, 191, 36, 0.2);
+  --status-warning-text: #fde68a;
+  --status-error-bg: rgba(248, 113, 113, 0.22);
+  --status-error-text: #fca5a5;
+
+  --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.65), 0 0 24px rgba(251, 191, 36, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 36px rgba(251, 191, 36, 0.36), inset 0 1px 1px rgba(255, 255, 255, 0.32);
 }

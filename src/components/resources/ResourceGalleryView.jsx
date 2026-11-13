@@ -200,8 +200,8 @@ export default function ResourceGalleryView({
         />
       ) : (
         <div className="resource-grid">
-          {visibleResources.map((resource) => (
-            <ResourceCard key={resource.id} resource={resource} />
+          {visibleResources.map((resource, idx) => (
+            <ResourceCard key={resource.id} resource={resource} index={idx} />
           ))}
         </div>
       )}

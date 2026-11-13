@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Download, ExternalLink, FileText, ShieldAlert, Sparkles } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+import CalmBackdrop from '../components/layout/CalmBackdrop';
 import { formatBytes } from '../lib/fileValidation';
 
 export default function SharedResourcePage() {
@@ -118,6 +119,7 @@ export default function SharedResourcePage() {
 
   return (
     <main style={{ minHeight: '100vh', padding: '28px 20px', maxWidth: 1040, margin: '0 auto' }}>
+      <CalmBackdrop designStyle="atelier" atmosphere="atelier" />
       <header className="page-header">
         <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 700 }}>
           <span className="brand-icon-box">

@@ -4,7 +4,15 @@ import { isSupabaseConfigured, supabase } from '../lib/supabaseClient';
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(() => {
+    try {
+      const demo = localStorage.getItem('creativehub_demo_user');
+      if (demo) {
+        return { user: JSON.parse(demo) };
+      }
+    } catch {}
+    return null;
+  });
   const [loading, setLoading] = useState(isSupabaseConfigured);
 
   useEffect(() => {
@@ -47,8 +55,24 @@ export function AuthProvider({ children }) {
   };
 
   const signOut = async () => {
+    try {
+      localStorage.removeItem('creativehub_demo_user');
+    } catch {}
+    setSession(null);
     if (!supabase) return { error: null };
     return supabase.auth.signOut();
+  };
+
+  const enterDemo = () => {
+    const demoUser = {
+      id: '00000000-0000-0000-0000-000000000001',
+      email: 'creator@creativehub.studio',
+      user_metadata: { display_name: 'Studio Explorer' },
+    };
+    try {
+      localStorage.setItem('creativehub_demo_user', JSON.stringify(demoUser));
+    } catch {}
+    setSession({ user: demoUser });
   };
 
   return (
@@ -61,6 +85,7 @@ export function AuthProvider({ children }) {
         signUp,
         signIn,
         signOut,
+        enterDemo,
       }}
     >
       {children}

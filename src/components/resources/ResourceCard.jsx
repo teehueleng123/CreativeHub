@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ExternalLink, FileImage, FileText, Film, Heart, Music } from 'lucide-react';
+import { ExternalLink, FileImage, FileText, Film, Heart, Music, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatBytes } from '../../lib/fileValidation';
 import { getSignedAssetUrl } from '../../lib/storageHelpers';
@@ -12,7 +12,7 @@ function getHostname(url) {
   }
 }
 
-export default function ResourceCard({ resource }) {
+export default function ResourceCard({ resource, index }) {
   const isExternal = resource.resource_kind === 'external_url';
   const isImage = !isExternal && resource.mime_type?.startsWith('image/');
   const isVideo = !isExternal && resource.mime_type?.startsWith('video/');
@@ -21,6 +21,8 @@ export default function ResourceCard({ resource }) {
   const tags = resource.tags ?? [];
 
   const [thumbUrl, setThumbUrl] = useState('');
+  const [hoverVideoUrl, setHoverVideoUrl] = useState('');
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -38,68 +40,98 @@ export default function ResourceCard({ resource }) {
     };
   }, [resource.thumbnail_path, resource.storage_path, isImage]);
 
-  return (
-    <Link className="resource-card" to={`/resources/${resource.id}`}>
-      <div className="resource-thumb">
-        <span className="resource-kind-tag">
-          {isExternal ? 'External Reference' : (resource.file_extension || 'FILE').toUpperCase()}
-        </span>
+  const handleMouseEnter = () => {
+    setHovering(true);
+    if (isVideo && resource.storage_path && !hoverVideoUrl) {
+      getSignedAssetUrl(resource.storage_path, { expiresIn: 300 })
+        .then((url) => {
+          if (url) setHoverVideoUrl(url);
+        })
+        .catch(() => {});
+    }
+  };
 
-        {thumbUrl ? (
+  const handleMouseLeave = () => {
+    setHovering(false);
+  };
+
+  return (
+    <Link
+      className="cinema-card"
+      to={`/resources/${resource.id}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {index !== undefined && (
+        <>
+          <span className="archive-plate-number" aria-hidden="true">
+            PLATE № {String(index + 1).padStart(2, '0')}
+          </span>
+          <span className="cosmos-sector-tag" aria-hidden="true">
+            // SEC-0{index + 1}
+          </span>
+        </>
+      )}
+
+      <div className="cinema-card-media">
+        {hovering && isVideo && hoverVideoUrl ? (
+          <video src={hoverVideoUrl} autoPlay muted loop playsInline />
+        ) : thumbUrl ? (
           <img src={thumbUrl} alt={resource.title} loading="lazy" />
         ) : isExternal ? (
-          <ExternalLink size={32} />
+          <ExternalLink size={34} />
         ) : isVideo ? (
-          <Film size={32} />
+          <Film size={34} />
         ) : isAudio ? (
-          <Music size={32} />
+          <Music size={34} />
         ) : isImage ? (
-          <FileImage size={32} />
+          <FileImage size={34} />
         ) : (
-          <FileText size={32} />
+          <FileText size={34} />
+        )}
+
+        <span className="resource-kind-tag">
+          {isExternal ? 'Reference' : (resource.file_extension || 'FILE').toUpperCase()}
+        </span>
+
+        {resource.is_favorite && (
+          <span className="resource-fav-badge" aria-label="Favourited">
+            <Heart size={14} color="#f08d9b" fill="#f08d9b" />
+          </span>
+        )}
+
+        {isVideo && (
+          <span
+            className={`video-play-badge ${hovering && hoverVideoUrl ? 'is-previewing' : ''}`}
+            aria-hidden="true"
+          >
+            <Play size={18} fill="#ffffff" style={{ marginLeft: 2 }} />
+          </span>
         )}
       </div>
 
-      <div className="resource-body">
-        <div className="resource-meta-row">
-          {category ? (
-            <span className="pill-badge">
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  backgroundColor: category.color,
-                }}
-              />
-              {category.name}
-            </span>
-          ) : (
-            <span className="pill-badge">Uncategorized</span>
-          )}
-          {resource.is_favorite && <Heart size={15} color="#e11d48" fill="#e11d48" />}
-        </div>
+      <div className="cinema-card-scrim" />
 
-        <h3 className="resource-title">{resource.title}</h3>
+      <div className="cinema-card-overlay">
+        <h3 className="cinema-card-title">{resource.title}</h3>
 
         {tags.length > 0 && (
           <div className="tag-row">
-            {tags.slice(0, 3).map((tag) => (
-              <span key={tag.id} className="tag-chip">
+            {tags.slice(0, 2).map((tag) => (
+              <span key={tag.id} className="tag-chip cinema-card-tag">
                 #{tag.name}
               </span>
             ))}
-            {tags.length > 3 && <span className="tag-chip">+{tags.length - 3}</span>}
           </div>
         )}
 
-        <div className="resource-meta-row">
+        <div className="cinema-card-meta">
+          <span>{category ? category.name : 'Uncategorized'}</span>
           <span>
             {isExternal
               ? getHostname(resource.external_url)
               : formatBytes(resource.file_size_bytes) || 'Cloud file'}
           </span>
-          <span>{new Date(resource.created_at).toLocaleDateString()}</span>
         </div>
       </div>
     </Link>

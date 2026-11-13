@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { FolderHeart, Library, Link2, Upload } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { ArrowRight, Film, FolderHeart, Library, Link2, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ResourceCard from '../components/resources/ResourceCard';
 import ResourceFormModal from '../components/resources/ResourceFormModal';
@@ -7,116 +7,149 @@ import CategoryIcon from '../components/ui/CategoryIcon';
 import EmptyState from '../components/ui/EmptyState';
 import { useAuth } from '../context/AuthContext';
 import { useLibraryOverview } from '../hooks/useLibraryOverview';
+import { getSignedAssetUrl } from '../lib/storageHelpers';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const { categories, resources, collections, profile, loading, error, refresh } =
     useLibraryOverview();
   const [modalState, setModalState] = useState({ open: false, mode: 'file' });
+  const [spotlightUrl, setSpotlightUrl] = useState('');
 
-  const favoriteCount = resources.filter((item) => item.is_favorite).length;
-  const referenceCount = resources.filter((item) => item.resource_kind === 'external_url').length;
-  const recentResources = resources.slice(0, 4);
+  const featuredResource =
+    resources.find((item) => item.resource_kind === 'file' && item.mime_type?.startsWith('video/')) ||
+    resources.find((item) => item.resource_kind === 'file' && item.mime_type?.startsWith('image/')) ||
+    null;
+
+  useEffect(() => {
+    let active = true;
+    if (!featuredResource?.storage_path) {
+      setSpotlightUrl('');
+      return undefined;
+    }
+
+    getSignedAssetUrl(featuredResource.storage_path, { expiresIn: 300 })
+      .then((url) => {
+        if (active && url) setSpotlightUrl(url);
+      })
+      .catch(() => {});
+
+    return () => {
+      active = false;
+    };
+  }, [featuredResource?.storage_path]);
+
+  const recentResources = resources.slice(0, 6);
   const recentlyAccessed = [...resources]
     .filter((item) => item.last_accessed_at)
     .sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at))
-    .slice(0, 4);
+    .slice(0, 3);
+
+  const categoryCounts = useMemo(() => {
+    const counts = {};
+    for (const res of resources) {
+      if (res.category_id) {
+        counts[res.category_id] = (counts[res.category_id] || 0) + 1;
+      }
+    }
+    return counts;
+  }, [resources]);
 
   const displayName = profile?.display_name || user?.email?.split('@')[0] || 'Creator';
 
-  const countForCategory = (categoryId) =>
-    resources.filter((item) => item.category_id === categoryId).length;
-
   return (
     <div>
-      <section className="hero-banner">
-        <div>
-          <span className="pill-badge" style={{ marginBottom: 10 }}>
-            Personal Creative Studio
-          </span>
-          <h1 className="page-title">Welcome back, {displayName}</h1>
-          <p className="page-subtitle">
-            Browse your creative categories, upload new assets, or bookmark external references.
-          </p>
+      <section className="cinema-hero">
+        <div className="cinema-hero-copy">
+          <div>
+            <span className="pill-badge" style={{ marginBottom: 12 }}>
+              Your Calm Video &amp; Asset Sanctuary
+            </span>
+            <h1 className="page-title">Breathe &amp; create, {displayName}.</h1>
+            <p className="page-subtitle">
+              A quiet screening space for your saved videos, atmospheric overlays, textures, and
+              creative inspiration—private and always in sync.
+            </p>
+          </div>
+
+          <div className="header-actions">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setModalState({ open: true, mode: 'file' })}
+            >
+              <Upload size={16} /> Upload Video or File
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setModalState({ open: true, mode: 'external_url' })}
+            >
+              <Link2 size={16} /> Save External Link
+            </button>
+          </div>
         </div>
 
-        <div className="header-actions">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => setModalState({ open: true, mode: 'file' })}
-          >
-            <Upload size={16} /> Upload File
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => setModalState({ open: true, mode: 'external_url' })}
-          >
-            <Link2 size={16} /> Save Reference
-          </button>
+        <div className="cinema-hero-stage">
+          {featuredResource && spotlightUrl ? (
+            <>
+              {featuredResource.mime_type?.startsWith('video/') ? (
+                <video src={spotlightUrl} autoPlay muted loop playsInline />
+              ) : (
+                <img src={spotlightUrl} alt={featuredResource.title} />
+              )}
+              <Link className="cinema-hero-caption" to={`/resources/${featuredResource.id}`}>
+                <div>
+                  <div style={{ fontWeight: 700 }}>{featuredResource.title}</div>
+                  <div style={{ fontSize: '0.76rem', opacity: 0.8 }}>Featured from your library</div>
+                </div>
+                <ArrowRight size={16} />
+              </Link>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: 28, color: '#d7e6e1' }}>
+              <Film size={38} style={{ opacity: 0.75, marginBottom: 10 }} />
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>Screening Stage Ready</div>
+              <div style={{ fontSize: '0.84rem', opacity: 0.75 }}>
+                Upload a calm video clip or visual asset to feature it here automatically.
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {error && <div className="status-banner error">{error}</div>}
 
-      <section className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Total Resources</div>
-          <div className="stat-value">{loading ? '—' : resources.length}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Saved References</div>
-          <div className="stat-value">{loading ? '—' : referenceCount}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Favourites</div>
-          <div className="stat-value">{loading ? '—' : favoriteCount}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Collections</div>
-          <div className="stat-value">{loading ? '—' : collections.length}</div>
-        </div>
-      </section>
-
-      <section className="section-block">
-        <div className="section-header">
-          <h2 className="section-title">Explore by Category</h2>
-          <Link to="/categories" style={{ fontSize: '0.88rem', fontWeight: 600 }}>
-            See all →
-          </Link>
-        </div>
-
-        <div className="category-grid">
-          {categories.map((cat) => (
-            <Link key={cat.id} className="category-card" to={`/library?category=${cat.id}`}>
-              <div className="category-icon-wrap" style={{ backgroundColor: cat.color }}>
-                <CategoryIcon name={cat.icon} size={22} />
-              </div>
-              <div>
-                <div className="category-card-title">{cat.name}</div>
-                <div className="category-card-meta">
-                  {countForCategory(cat.id)} {countForCategory(cat.id) === 1 ? 'item' : 'items'}
-                </div>
-              </div>
+      <div className="category-ribbon" role="region" aria-label="Quick categories">
+        {categories.map((cat) => {
+          const count = categoryCounts[cat.id] || 0;
+          return (
+            <Link key={cat.id} className="category-pill-card" to={`/library?category=${cat.id}`}>
+              <span className="category-pill-dot" style={{ backgroundColor: cat.color }}>
+                <CategoryIcon name={cat.icon} size={15} />
+              </span>
+              <span className="category-pill-name">{cat.name}</span>
+              <span className="category-pill-count">{count}</span>
             </Link>
-          ))}
-        </div>
-      </section>
+          );
+        })}
+      </div>
 
       <section className="section-block">
         <div className="section-header">
-          <h2 className="section-title">Recently Added</h2>
+          <h2 className="section-title">Screening Room · Recently Added</h2>
           <Link to="/library" style={{ fontSize: '0.88rem', fontWeight: 600 }}>
-            View library →
+            Open full library →
           </Link>
         </div>
 
-        {recentResources.length === 0 ? (
+        {loading ? (
+          <p className="page-subtitle">Preparing your screening room...</p>
+        ) : recentResources.length === 0 ? (
           <EmptyState
             icon={<Library size={24} />}
-            title="Your creative library is empty"
-            description="Upload your first image, overlay, texture, or clip (up to 50 MB) or save an external link."
+            title="Your sanctuary awaits its first video or asset"
+            description="Upload an MP4/WebM clip, image, or texture (up to 50 MB), or save an external creative link."
             action={
               <button
                 type="button"
@@ -128,9 +161,9 @@ export default function DashboardPage() {
             }
           />
         ) : (
-          <div className="resource-grid">
-            {recentResources.map((resource) => (
-              <ResourceCard key={resource.id} resource={resource} />
+          <div className={`resource-grid ${recentResources.length >= 3 ? 'bento-featured' : ''}`}>
+            {recentResources.map((resource, idx) => (
+              <ResourceCard key={resource.id} resource={resource} index={idx} />
             ))}
           </div>
         )}
@@ -139,7 +172,7 @@ export default function DashboardPage() {
       {recentlyAccessed.length > 0 && (
         <section className="section-block">
           <div className="section-header">
-            <h2 className="section-title">Quick Access (Recently Viewed)</h2>
+            <h2 className="section-title">Recently Viewed</h2>
           </div>
           <div className="resource-grid">
             {recentlyAccessed.map((resource) => (
@@ -149,26 +182,14 @@ export default function DashboardPage() {
         </section>
       )}
 
-      <section className="section-block">
-        <div className="section-header">
-          <h2 className="section-title">Quick Access Collections</h2>
-          <Link to="/collections" style={{ fontSize: '0.88rem', fontWeight: 600 }}>
-            Manage →
-          </Link>
-        </div>
-
-        {collections.length === 0 ? (
-          <EmptyState
-            icon={<FolderHeart size={24} />}
-            title="No collections yet"
-            description="Create a collection on the Collections page to group assets by project, mood, or colour."
-            action={
-              <Link className="btn btn-secondary" to="/collections">
-                Create Collection
-              </Link>
-            }
-          />
-        ) : (
+      {collections.length > 0 && (
+        <section className="section-block">
+          <div className="section-header">
+            <h2 className="section-title">Moods &amp; Collections</h2>
+            <Link to="/collections" style={{ fontSize: '0.88rem', fontWeight: 600 }}>
+              Manage →
+            </Link>
+          </div>
           <div className="category-grid">
             {collections.slice(0, 4).map((col) => (
               <Link key={col.id} className="category-card" to={`/collections?id=${col.id}`}>
@@ -185,8 +206,8 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
       <ResourceFormModal
         isOpen={modalState.open}

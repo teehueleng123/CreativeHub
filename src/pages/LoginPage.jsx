@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
+import CalmBackdrop from '../components/layout/CalmBackdrop';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const { user, loading, isSupabaseConfigured, signIn, signUp } = useAuth();
+  const { user, loading, isSupabaseConfigured, signIn, signUp, enterDemo } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [mode, setMode] = useState('signin');
   const [feedback, setFeedback] = useState({ type: '', message: '' });
   const [submitting, setSubmitting] = useState(false);
@@ -40,44 +42,72 @@ export default function LoginPage() {
 
   return (
     <div className="auth-shell">
+      <CalmBackdrop designStyle="login" atmosphere="login" />
       <section className="auth-showcase">
         <div className="auth-showcase-brand">
           <span className="brand-icon-box">
             <Sparkles size={18} />
           </span>
-          CreativeHub
+          <span className="brand-title">CreativeHub</span>
         </div>
 
         <div>
-          <h1 className="auth-showcase-title">Your personal creative cloud studio.</h1>
+          <span className="auth-kicker-tag">Digital Asset Vault &amp; Screening</span>
+          <h1 className="auth-showcase-title">Your personal creative cloud vault.</h1>
           <p className="auth-showcase-copy">
-            Collect visual effects, textures, clips, motion graphics, and inspiration links in one
-            private, organised library—accessible from any device.
+            Collect visual effects, textures, video clips, and creative references in one
+            private, high-resolution archive—accessible anywhere.
           </p>
           <div className="auth-swatch-row">
-            <span className="auth-swatch">Images</span>
             <span className="auth-swatch">Video Clips</span>
-            <span className="auth-swatch">Visual Effects</span>
-            <span className="auth-swatch">Textures</span>
+            <span className="auth-swatch">3D Textures</span>
             <span className="auth-swatch">Motion Graphics</span>
+            <span className="auth-swatch">Visual Effects</span>
+            <span className="auth-swatch">Inspiration References</span>
           </div>
         </div>
 
-        <p style={{ fontSize: '0.84rem', color: 'var(--text-on-dark-muted)', margin: 0 }}>
-          Private by default · Row Level Security · Up to 50 MB per file on Supabase Free
-        </p>
+        <div className="auth-trust-badge">
+          <ShieldCheck size={16} />
+          <span>Private by default · Row Level Security · Supabase Free Tier</span>
+        </div>
       </section>
 
       <section className="auth-panel">
         <div className="auth-card">
-          <h2 style={{ fontFamily: 'var(--font-display)', margin: '0 0 6px', fontSize: '1.65rem' }}>
-            {mode === 'signup' ? 'Create your studio' : 'Welcome back'}
-          </h2>
-          <p className="page-subtitle" style={{ marginBottom: 20 }}>
-            {mode === 'signup'
-              ? 'Sign up to start building your private creative library.'
-              : 'Sign in to access your saved assets and references.'}
-          </p>
+          <div className="auth-mode-switch">
+            <button
+              type="button"
+              className={`auth-mode-tab ${mode === 'signin' ? 'active' : ''}`}
+              onClick={() => {
+                setFeedback({ type: '', message: '' });
+                setMode('signin');
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              className={`auth-mode-tab ${mode === 'signup' ? 'active' : ''}`}
+              onClick={() => {
+                setFeedback({ type: '', message: '' });
+                setMode('signup');
+              }}
+            >
+              Create Account
+            </button>
+          </div>
+
+          <div className="auth-card-header">
+            <h2 className="auth-card-title">
+              {mode === 'signup' ? 'Create your creative vault' : 'Welcome to CreativeHub'}
+            </h2>
+            <p className="auth-card-subtitle">
+              {mode === 'signup'
+                ? 'Sign up to start organizing your private cloud library.'
+                : 'Sign in to access your saved screening assets and collections.'}
+            </p>
+          </div>
 
           {!isSupabaseConfigured && (
             <div className="status-banner warning">
@@ -91,45 +121,62 @@ export default function LoginPage() {
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <label className="field-label">
-              Email
-              <input
-                className="field-input"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-              />
+              <span>Email Address</span>
+              <div className="auth-input-container">
+                <Mail size={16} className="auth-input-icon" />
+                <input
+                  className="field-input"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  autoComplete="email"
+                />
+              </div>
             </label>
 
             <label className="field-label">
-              Password
-              <input
-                className="field-input"
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 6 characters"
-              />
+              <span>Password</span>
+              <div className="auth-input-container">
+                <Lock size={16} className="auth-input-icon" />
+                <input
+                  className="field-input"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Minimum 6 characters"
+                  autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                />
+                <button
+                  type="button"
+                  className="auth-password-toggle-btn"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  title={showPassword ? 'Hide password' : 'Reveal password'}
+                  aria-label={showPassword ? 'Hide password' : 'Reveal password'}
+                >
+                  {showPassword ? <Eye size={17} /> : <EyeOff size={17} />}
+                </button>
+              </div>
             </label>
 
-            <button className="btn btn-primary" type="submit" disabled={submitting || !isSupabaseConfigured}>
-              {submitting ? 'Please wait...' : mode === 'signup' ? 'Create Account' : 'Sign In'}
-            </button>
-
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={() => {
-                setFeedback({ type: '', message: '' });
-                setMode(mode === 'signup' ? 'signin' : 'signup');
-              }}
-            >
-              {mode === 'signup' ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+            <button className="btn btn-primary auth-submit-btn" type="submit" disabled={submitting || !isSupabaseConfigured}>
+              {submitting ? 'Authenticating...' : mode === 'signup' ? 'Create Account' : 'Sign In to Studio'}
             </button>
           </form>
+
+          <div style={{ textAlign: 'center', marginTop: 14 }}>
+            <button
+              type="button"
+              className="btn btn-secondary auth-demo-btn"
+              style={{ width: '100%', fontSize: '0.82rem', padding: '9px 14px' }}
+              onClick={enterDemo}
+            >
+              ✦ Enter Studio Directly (Demo Preview)
+            </button>
+          </div>
         </div>
       </section>
     </div>

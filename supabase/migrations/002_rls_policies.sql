@@ -10,10 +10,14 @@ alter table public.collections enable row level security;
 alter table public.collection_items enable row level security;
 alter table public.share_links enable row level security;
 
--- Profiles: users can view and update only their own profile
+-- Profiles: users can view, insert, and update only their own profile
 drop policy if exists "profiles_select_own" on public.profiles;
 create policy "profiles_select_own" on public.profiles
   for select using (auth.uid() = id);
+
+drop policy if exists "profiles_insert_own" on public.profiles;
+create policy "profiles_insert_own" on public.profiles
+  for insert with check (auth.uid() = id);
 
 drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own" on public.profiles
